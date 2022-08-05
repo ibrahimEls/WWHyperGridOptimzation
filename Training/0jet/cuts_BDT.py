@@ -2,6 +2,7 @@
 supercut = '   mll>20 \
             && Lepton_pt[0]>25 \
             && Lepton_pt[1]>20 \
+            && (fabs(91.1876 - mll) > 15.) \
             && (nLepton>=2 && Alt$(Lepton_pt[2],0)<10) \
             && abs(Lepton_eta[0])<2.5 && abs(Lepton_eta[1])<2.5 \
             && ptll>30 \

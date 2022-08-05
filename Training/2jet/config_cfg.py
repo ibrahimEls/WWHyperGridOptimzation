@@ -42,8 +42,8 @@ for sampleName, sample in samples.items():
 #cut="(({0}))".format(preselections['ALL'])
 cut="(({0}))".format(supercut)
 mvaVariables = [
-   'pt1',
-   'pt2',
+    'Lepton_pt[0]',
+    'Lepton_pt[1]',
    'Lepton_eta[0]',
    'Lepton_eta[1]',
    'PuppiMET_pt',
@@ -56,8 +56,8 @@ mvaVariables = [
    'dphill',
    'dphilmet',
    'dphillmet',
-   'PuppiMET_pt',
    'mtw1',
+   'mth',
    'mtw2',
    'pTWW',
    'pTHjj',

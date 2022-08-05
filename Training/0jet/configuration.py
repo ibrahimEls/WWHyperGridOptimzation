@@ -2,7 +2,7 @@
 
 import os
 
-configDir = os.path.expandvars("/afs/cern.ch/user/s/ssaumya/Projects/WW_Analysis_Work/WW_Cuts_Optimization/CMSSW_11_1_0/src/PlotsConfigurations/Configurations/WW/FullRunII/BDT_Training_DY_v1/0jet/") #change the path to where following files are
+configDir = os.path.expandvars("/afs/cern.ch/user/i/ielshark/CMSSW_10_6_4/src/BDT_DY_discriminator_for_WW/Training/0jet")
 
 tagName = ''
 

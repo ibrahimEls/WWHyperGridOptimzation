@@ -21,21 +21,35 @@ def runJob():
     for sampleName, sample in config.samples.items():
         if config.structure[sampleName]['isData']==1:
             continue
+            
 
         sample['tree'] = TChain("Events")
         for f in sample['name']:
             sample['tree'].Add(f)
 
+	print('Samples = ')
+	print(sample['tree'])
+	print(sample.keys())
         if config.structure[sampleName]['isSignal']==1:
             dataloader.AddSignalTree(sample['tree'], 1.0)
+            dataloader.SetSignalWeightExpression(sample['weight'])
         else:
             dataloader.AddBackgroundTree(sample['tree'], 1.0)
+            dataloader.SetBackgroundWeightExpression(sample['weight'])
+
         # output_dim += 1
+
+    #input = TFile.Open('/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Summer16_102X_nAODv7_Full2016v7/MCl1loose2016v7__MCCorr2016v7__l2loose__l2tightOR2016v7/nanoLatino_DYJetsToLL_M-50_ext2__part9.root')
+    #input = TFile.Open('/eos/user/f/fernanpe/WW_skimmedTrees_nanoAODv7/2016/nanoLatino_DYJetsToLL_M-50_ext2__part9.root')
+    #TFile* signal = new TFile("");
+    #TTree* sigTree = (TTree*)(signal->Get("tree"));
+    #dataloader.AddBackgroundTree(input.Get("Events"), 1.0)
+
+    #TFile* data = new TFile("/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Summer16_102X_nAODv7_Full2016v7/MCl1loose2016v7__MCCorr2016v7__l2loose__l2tightOR2016v7/nanoLatino_DYJetsToLL_M-50_ext2__part9.root");
+    #TTree* dataTree = (TTree*)(data->Get("Events"));
+
     dataloader.PrepareTrainingAndTestTree(TCut(config.cut),'SplitMode=Random::SplitSeed=10:NormMode=EqualNumEvents')
 
-    factory.BookMethod(dataloader, TMVA.Types.kBDT, "BDT", "!H:!V:NTrees=500:MinNodeSize=0.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.1:SeparationType=GiniIndex:nCuts=500" );
-    factory.BookMethod(dataloader, TMVA.Types.kBDT, "BDT1", "!H:!V:NTrees=1000:MinNodeSize=0.5%:MaxDepth=2:BoostType=AdaBoost:AdaBoostBeta=0.1:SeparationType=GiniIndex:nCuts=1000" );
-    factory.BookMethod(dataloader, TMVA.Types.kBDT, "BDT2", "!H:!V:NTrees=800:MinNodeSize=0.5%:MaxDepth=1:BoostType=AdaBoost:AdaBoostBeta=0.2:SeparationType=GiniIndex:nCuts=1000" );
     factory.BookMethod(dataloader, TMVA.Types.kBDT, "BDTG4D3",   "!H:!V:NTrees=500:MinNodeSize=1.5%:BoostType=Grad:Shrinkage=0.05:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=500:MaxDepth=3" );
     factory.BookMethod(dataloader, TMVA.Types.kBDT, "BDTG4C3", "!H:!V:NTrees=500:MinNodeSize=1.5%:BoostType=Grad:Shrinkage=0.05:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=300:MaxDepth=2" );
     factory.BookMethod(dataloader, TMVA.Types.kBDT, "BDTG4SK01",   "!H:!V:NTrees=500:MinNodeSize=1.5%:BoostType=Grad:Shrinkage=0.01:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=500:MaxDepth=2" );
